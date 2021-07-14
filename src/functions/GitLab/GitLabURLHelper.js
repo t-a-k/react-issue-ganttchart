@@ -5,6 +5,11 @@ import {
 } from '../Common/CommonHelper.js';
 import { isGitHubURL } from '../GitHub/GitHubURLHelper.js';
 
+// $1 ... GitLab instance URL (may contain directories)
+// $2 ... name space
+// $3 ... project
+const selfHostingGitLabURLRE = /^(https?:\/\/\S+)\/([^\/\s]+)\/([^\/\s]+)\/?$/;
+
 export const isGitLabURL = (git_url) => {
   if (!isValidURL(git_url)) {
     return false;
@@ -19,60 +24,61 @@ export const getSelfHostingGitLabDomain = (git_url) => {
   if (isGitHubURL(git_url)) {
     return null;
   }
-  if (!isValidURL(git_url)) {
+  if (!isValidVariable(git_url)) {
     return null;
   }
-  const split_git_url = git_url.split('/');
-  if (split_git_url.length >= 5) {
-    return split_git_url[2];
+  const split_git_url = selfHostingGitLabURLRE.exec(git_url);
+  if (split_git_url) {
+    return split_git_url[1];
   }
   return null;
 };
 
 export const getGitLabDomain = (git_url) => {
-  if (!isValidURL(git_url)) {
+  if (!isValidVariable(git_url)) {
     return null;
   }
   let gitlab_domain = null;
   const self_hosting_gitlab_domain = getSelfHostingGitLabDomain(git_url);
   if (self_hosting_gitlab_domain !== null) {
-    gitlab_domain = 'https://' + self_hosting_gitlab_domain + '/';
+    gitlab_domain = self_hosting_gitlab_domain + '/';
   }
   return gitlab_domain;
 };
 
 export const getGitLabURL = (git_url) => {
-  if (!isValidURL(git_url)) {
+  if (!isValidVariable(git_url)) {
     return null;
   }
   return getGitLabDomain(git_url);
 };
 
 export const getGitLabAPIURL = (git_url) => {
-  if (!isValidURL(git_url)) {
-    return null;
+  const domain = getGitLabDomain(git_url);
+  if (domain) {
+    return domain + 'api/v4/';
   }
-  return getGitLabDomain(git_url) + 'api/v4/';
+  return null;
 };
 
 export const getGitLabNameSpaceFromGitURL = (git_url) => {
-  if (!isValidURL(git_url)) {
+  if (!isValidVariable(git_url)) {
     return null;
   }
-  const split_git_url = git_url.split('/');
-  if (split_git_url.length >= 5) {
-    return split_git_url[3];
+  const split_git_url = selfHostingGitLabURLRE.exec(git_url);
+  if (split_git_url) {
+    return split_git_url[2];
   }
   return null;
 };
 
 export const getGitLabProjectFromGitURL = (git_url) => {
-  if (!isValidURL(git_url)) {
+  if (!isValidVariable(git_url)) {
     return null;
   }
-  const split_git_url = git_url.split('/');
-  if (split_git_url.length >= 5) {
-    return split_git_url[4];
+  const split_git_url = selfHostingGitLabURLRE.exec(git_url);
+  if (split_git_url) {
+    return split_git_url[3];
   }
   return null;
 };

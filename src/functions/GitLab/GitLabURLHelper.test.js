@@ -56,14 +56,14 @@ describe('getSelfHostingGitLabDomain', () => {
       getSelfHostingGitLabDomain(
         'https://example.gitlab.com/lamact/react-issue-ganttchart/'
       )
-    ).toBe('example.gitlab.com');
+    ).toBe('https://example.gitlab.com');
   });
   test('true', () => {
     expect(
       getSelfHostingGitLabDomain(
         'https://gitlab.com/lamact/react-issue-ganttchart/'
       )
-    ).toBe('gitlab.com');
+    ).toBe('https://gitlab.com');
   });
   test('null', () => {
     expect(
@@ -79,6 +79,13 @@ describe('getSelfHostingGitLabDomain', () => {
   });
   test('null', () => {
     expect(getSelfHostingGitLabDomain('https://gitlab.com')).toBe(null);
+  });
+  test('true', () => {
+    expect(
+      getSelfHostingGitLabDomain(
+	'http://example.com/gitlab/lamact/react-issue-ganttchart'
+      )
+    ).toBe('http://example.com/gitlab');
   });
 });
 
@@ -100,6 +107,11 @@ describe('getGitLabDomain', () => {
       null
     );
   });
+  test('true', () => {
+    expect(
+      getGitLabDomain('http://example.com/gitlab/lamact/react-issue-ganttchart')
+    ).toBe('http://example.com/gitlab/');
+  });
 });
 
 describe('getGitLabURL', () => {
@@ -117,6 +129,11 @@ describe('getGitLabURL', () => {
     expect(getGitLabURL('htttlab.com/lamact/react-issue-ganttchart/')).toBe(
       null
     );
+  });
+  test('true', () => {
+    expect(
+      getGitLabURL('http://example.com/gitlab/lamact/react-issue-ganttchart')
+    ).toBe('http://example.com/gitlab/');
   });
 });
 
@@ -137,6 +154,13 @@ describe('getGitLabAPIURL', () => {
     expect(getGitLabAPIURL('htttlab.com/lamact/react-issue-ganttchart/')).toBe(
       null
     );
+  });
+  test('true', () => {
+    expect(
+      getGitLabAPIURL(
+        'http://example.com/gitlab/lamact/react-issue-ganttchart'
+      )
+    ).toBe('http://example.com/gitlab/api/v4/');
   });
 });
 
@@ -165,6 +189,13 @@ describe('getGitLabNameSpaceFromGitURL', () => {
   test('null', () => {
     expect(getGitLabNameSpaceFromGitURL('https://ex.gitlab.com')).toBe(null);
   });
+  test('true', () => {
+    expect(
+      getGitLabNameSpaceFromGitURL(
+        'http://example.com/gitlab/lamact/react-issue-ganttchart'
+      )
+    ).toBe('lamact');
+  });
 });
 
 describe('getGitLabProjectFromGitURL', () => {
@@ -189,6 +220,13 @@ describe('getGitLabProjectFromGitURL', () => {
   });
   test('null', () => {
     expect(getGitLabProjectFromGitURL('https://ex.gitlab.com')).toBe(null);
+  });
+  test('true', () => {
+    expect(
+      getGitLabProjectFromGitURL(
+        'http://example.com/gitlab/lamact/react-issue-ganttchart'
+      )
+    ).toBe('react-issue-ganttchart');
   });
 });
 
